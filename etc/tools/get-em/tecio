@@ -83,7 +83,7 @@ GE_geturl()
 #
 GE_getfolder()
 {
-  echo tecsrc
+  echo tecio
 }
 
 

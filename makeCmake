@@ -39,7 +39,7 @@ wmakeCheckPwd "$WM_THIRD_PARTY_DIR" || {
 . etc/tools/ThirdPartyFunctions
 #------------------------------------------------------------------------------
 
-cmakePACKAGE=`. etc/defaults.sh ; echo \$cmake_version`
+cmakePACKAGE="cmake-`. etc/defaults.sh ; echo \$cmake_version`"
 
 #------------------------------------------------------------------------------
 
