@@ -1,0 +1,101 @@
+#!/bin/sh
+#------------------------------------------------------------------------------
+# =========                 |
+# \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+#  \\    /   O peration     |
+#   \\  /    A nd           | Copyright (C) 2004-2011 OpenCFD Ltd.
+#    \\/     M anipulation  |
+#------------------------------------------------------------------------------
+# License
+#     This file is part of OpenFOAM.
+#
+#     OpenFOAM is free software: you can redistribute it and/or modify it
+#     under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     OpenFOAM is distributed in the hope that it will be useful, but WITHOUT
+#     ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#     FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+#     for more details.
+#
+#     You should have received a copy of the GNU General Public License
+#     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Script
+#     getBinutils
+#
+# Description
+#     Get Binutils unpack it.
+#
+#------------------------------------------------------------------------------
+binutilsPACKAGE="binutils-2.20.1"
+
+#------------------------------------------------------------------------------
+# run from third-party directory only
+wmakeCheckPwd "$WM_THIRD_PARTY_DIR" || {
+    echo "Error: Current directory is not \$WM_THIRD_PARTY_DIR"
+    echo "    The environment variables are inconsistent with the installation."
+    echo "    Check the OpenFOAM entries in your dot-files and source them."
+    exit 1
+}
+. etc/tools/ThirdPartyFunctions
+#------------------------------------------------------------------------------
+
+usage() {
+    exec 1>&2
+    while [ "$#" -ge 1 ]; do echo "$1"; shift; done
+    cat<<USAGE
+
+usage: ${0##*/} [binutils-VERSION]
+
+* build combinations of binutils
+    $binutilsPACKAGE
+
+USAGE
+    exit 1
+}
+
+getFile() {
+  packageDir=$1
+  tarFile=$2
+  url=$3
+
+  if [ ! -d ${packageDir} ]
+  then
+      downloadFile $tarFile $url
+
+      if [ -e download/$tarFile ]
+      then
+          echo "unpack download/$tarFile"
+          tar -xf download/$tarFile
+      else
+          echo "no download/$tarFile to unpack"
+      fi
+  fi
+}
+
+# parse options
+while [ "$#" -gt 0 ]
+do
+    case "$1" in
+    -h | -help)
+        usage
+        ;;
+    binutils-[2-9]*)
+        binutilsPACKAGE="${1%%/}"
+        shift
+        ;;
+    *)
+        usage "unknown option/argument: '$*'"
+        ;;
+    esac
+done
+
+binutilsFile=$binutilsPACKAGE.tar.bz2
+
+binutilsUrl="ftp://ftp.mirrorservice.org/sites/sourceware.org/pub/binutils/releases/$binutilsFile"
+
+getFile ${binutilsPACKAGE} ${binutilsFile} ${binutilsUrl}
+
+# ----------------------------------------------------------------- end-of-file
