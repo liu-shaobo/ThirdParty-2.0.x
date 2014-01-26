@@ -29,7 +29,7 @@
 #     Get Binutils unpack it.
 #
 #------------------------------------------------------------------------------
-binutilsPACKAGE="binutils-2.20.1"
+binutilsPACKAGE="binutils-2.23"
 
 #------------------------------------------------------------------------------
 # run from third-party directory only
